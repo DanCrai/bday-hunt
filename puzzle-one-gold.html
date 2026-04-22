@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html>
+<body>
+
+    <div id="lock">
+        <input type="password" id="pw">
+        <button onclick="check()">Enter</button>
+    </div>
+
+    <div id="content" style="display:none;">
+        <h2>Clue</h2>
+        <p>
+            Îmi încep mesajele cu o vorbă ca să meargă treaba strună:
+            Morcovul tânăr și găina bătrână fac din ciorbă una bună.
+        </p>
+        <p>
+            Ciocnirea de oțel a fost o artă nobilă încă din antichitate, cu atât mai onorabilă când și unde o privea și cezarul. Aproape se află spațiul prin care poți ajunge și pleca doar prin același loc. În acesta căutați următorul indiciu.
+        </p>
+    </div>
+
+    <script>
+const PASSWORD = "bdayDCGold";
+
+function check() {
+  if (pw.value === PASSWORD) {
+    lock.style.display = "none";
+    content.style.display = "block";
+  }
+}
+    </script>
+
+</body>
+</html>
