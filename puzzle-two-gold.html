@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+    <div id="lock">
+        <input type="password" id="pw">
+        <button onclick="unlock()">Enter</button>
+    </div>
+
+    <div id="content" style="display:none;">
+
+        <p>
+            1234 <br />
+            1235 <br />
+            1758 <br />
+        </p>
+
+        <h3 id="topMessage">Enter the code</h3>
+
+        <input id="answer">
+        <button onclick="checkAnswer()">Submit</button>
+
+        <p id="result"></p>
+    </div>
+
+    <script>
+        const PASSWORD = "bdayDCGold";
+        const CORRECT = "1234";
+
+        const COOLDOWN = 30000; // 30 seconds
+
+        let lockedUntil = 0;
+
+        function unlock() {
+            if (pw.value === PASSWORD) {
+                lock.style.display = "none";
+                content.style.display = "block";
+
+                // start initial cooldown ONCE
+                lockedUntil = Date.now() + COOLDOWN * 2;
+                updateCooldown("You need to wait ", " seconds before trying to guess.");
+            }
+        }
+
+        function checkAnswer() {
+            const now = Date.now();
+
+            if (now < lockedUntil) {
+                return;
+            }
+
+            if (answer.value === CORRECT) {
+                result.innerText = "Correct! Go to the fountain.";
+                return;
+            } else {
+                result.innerText = "Wrong!";
+                answer.value = "";
+            }
+
+            // cooldown after EVERY guess
+            lockedUntil = now + COOLDOWN;
+            updateCooldown("WRONG! You need to wait ", " seconds before trying again.");
+        }
+
+        function updateCooldown(prefixText, sufixText) {
+            const interval = setInterval(() => {
+                const now = Date.now();
+                const remaining = Math.ceil((lockedUntil - now) / 1000);
+
+                if (remaining > 0) {
+                    result.innerText = prefixText + remaining + sufixText;
+                    answer.disabled = true;
+                } else {
+                    result.innerText = "";
+                    answer.disabled = false;
+                    clearInterval(interval);
+                }
+            }, 200);
+        }
+    </script>
+
+</body>
+</html>
