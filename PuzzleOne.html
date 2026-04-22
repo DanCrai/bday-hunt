@@ -1,0 +1,29 @@
+const PASSWORD = "birthday";
+
+<!DOCTYPE html>
+<html>
+<body>
+
+    <div id="lock">
+        <input type="password" id="pw">
+        <button onclick="check()">Enter</button>
+    </div>
+
+    <div id="content" style="display:none;">
+        <h2>Clue</h2>
+        <p>Write your message here.</p>
+    </div>
+
+    <script>
+const PASSWORD = "birthday";
+
+function check() {
+  if (pw.value === PASSWORD) {
+    lock.style.display = "none";
+    content.style.display = "block";
+  }
+}
+    </script>
+
+</body>
+</html>
