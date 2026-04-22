@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+    <div id="lock">
+        <input type="password" id="pw">
+        <button onclick="unlock()">Enter</button>
+    </div>
+
+    <div id="content" style="display:none;">
+        <p id="status">Tap start</p>
+        <button onclick="start()">Start Scanner</button>
+        <pre id="log" style="font-size:12px;"></pre>
+    </div>
+
+    <script>
+        const PASSWORD = "birthday";
+
+        // TARGET 44.412573, 26.111006
+        const targetLat = 44.412573;
+        const targetLon = 26.111006;
+
+        let watchId = null;
+        let beepInterval = null;
+        let currentSpeed = 1000;
+
+        function log(msg) {
+            console.log(msg);
+            document.getElementById("log").innerText += msg + "\n";
+        }
+
+        function unlock() {
+            const pwVal = document.getElementById("pw").value;
+
+            log("Unlock attempt");
+
+            if (pwVal === PASSWORD) {
+                document.getElementById("lock").style.display = "none";
+                document.getElementById("content").style.display = "block";
+                log("Unlocked successfully");
+            } else {
+                log("Wrong password");
+            }
+        }
+
+        function start() {
+            const statusEl = document.getElementById("status");
+
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            ctx.resume();
+
+            log("Start pressed");
+
+            if (!navigator.geolocation) {
+                statusEl.innerText = "Geolocation not supported";
+                log("Geolocation NOT supported");
+                return;
+            }
+
+            statusEl.innerText = "Requesting location...";
+            log("Requesting GPS...");
+
+            watchId = navigator.geolocation.watchPosition(
+                (pos) => {
+                    const lat = pos.coords.latitude;
+                    const lon = pos.coords.longitude;
+                    const acc = pos.coords.accuracy;
+
+                    log("Position received: " + lat + ", " + lon + " (±" + acc + "m)");
+
+                    const d = getDistance(lat, lon, targetLat, targetLon);
+
+                    updateBeepSpeed(d);
+
+                    statusEl.innerText =
+                        "Distance: " + Math.round(d) + "m\n" +
+                        "Accuracy: ±" + Math.round(acc) + "m";
+
+                    if (d < 10) {
+                        statusEl.innerText = "FINAL CLUE: THE OLD TREE";
+                        log("TARGET REACHED");
+                    }
+                },
+                (err) => {
+                    log("ERROR: " + err.message);
+                    statusEl.innerText = "Error: " + err.message;
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                }
+            );
+        }
+
+        function getDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371000;
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+
+            const a =
+                Math.sin(dLat / 2) ** 2 +
+                Math.cos(lat1 * Math.PI / 180) *
+                Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon / 2) ** 2;
+
+            return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        }
+
+        function playBeep() {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+            const oscillator = ctx.createOscillator();
+            const gain = ctx.createGain();
+
+            oscillator.type = "sine";
+            oscillator.frequency.setValueAtTime(800, ctx.currentTime);
+
+            gain.gain.setValueAtTime(0.1, ctx.currentTime);
+
+            oscillator.connect(gain);
+            gain.connect(ctx.destination);
+
+            oscillator.start();
+            oscillator.stop(ctx.currentTime + 0.1);
+        }
+
+        function updateBeepSpeed(distance) {
+            let newSpeed;
+
+            if (distance > 50) newSpeed = 2000;
+            else if (distance > 25) newSpeed = 1200;
+            else if (distance > 15) newSpeed = 700;
+            else if (distance > 8) newSpeed = 400;
+            else newSpeed = 150;
+
+            // only update if speed changed
+            if (Math.abs(newSpeed - currentSpeed) > 50) {
+                currentSpeed = newSpeed;
+
+                if (beepInterval) {
+                    clearInterval(beepInterval);
+                }
+
+                beepInterval = setInterval(() => {
+                    playBeep();
+                }, currentSpeed);
+            }
+        }
+    </script>
+
+</body>
+</html>
