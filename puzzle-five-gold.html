@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+    <div id="lock">
+        <input type="password" id="pw">
+        <button onclick="unlock()">Enter</button>
+    </div>
+
+    <div id="content" style="display:none;">
+        <p>Tap play</p>
+        <audio controls>
+            <source src="reverseMessage.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+
+    <script>const PASSWORD = "birthday";
+
+function unlock() {
+  if (pw.value === PASSWORD) {
+    lock.style.display = "none";
+    content.style.display = "block";
+  }
+}</script>
+
+</body>
+</html>
