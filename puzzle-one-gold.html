@@ -1,32 +1,113 @@
 ﻿<!DOCTYPE html>
 <html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            margin-top: 80px;
+            font-family: Arial, sans-serif;
+            background: #111;
+            color: #eee;
+        }
+
+        /* Main container */
+        #mainContent {
+            margin-top: 90px;
+            padding: 15px;
+        }
+
+        /* Card-style box */
+        .card {
+            background: #1b1b1b;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        /* Inputs */
+        input {
+            width: 50%;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            max-width: 500px;
+            margin: 10px auto;
+            display: block;
+        }
+
+        /* Buttons */
+        button {
+            width: 50%;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            background: #3a86ff;
+            color: white;
+            font-size: 16px;
+            max-width: 500px;
+            margin: 10px auto;
+            display: block;
+        }
+
+        /* Status text */
+        #status, #result {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        /* Park icon container */
+        #parkContainer {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+        }
+
+        #parkContainer img {
+            width: 60px;
+        }
+
+        /* Title */
+        h3 {
+            margin-top: 0;
+            color: #fff;
+        }
+    </style>
+</head>
 <body>
 
-    <div id="lock">
-        <input type="password" id="pw">
-        <button onclick="check()">Enter</button>
-    </div>
+    <div id="mainContent">
+        <div id="lock" class="card">
+            <input type="password" id="pw">
+            <button onclick="check()">Enter</button>
+        </div>
 
-    <div id="content" style="display:none;">
-        <h2>Clue</h2>
-        <p>
-            Îmi încep mesajele cu o vorbă ca să meargă treaba strună: <br />
-            Morcovul tânăr și găina bătrână fac din ciorbă una bună.
-        </p>
-        <p>
-            Ciocnirea de oțel a fost o artă nobilă încă din antichitate, cu atât mai onorabilă când și unde o privea și cezarul. Aproape se află spațiul prin care poți ajunge și pleca doar prin același loc. În acesta căutați următorul indiciu.
-        </p>
+
+        <div id="content" class="card" style="display:none;">
+            <div id="parkContainer">
+                <img src="carol.png">
+            </div>
+            <p>
+                Îmi încep mesajele cu o vorbă ca să meargă treaba strună: <br />
+                Morcovul tânăr și găina bătrână fac din ciorbă una bună.
+            </p>
+            <p>
+                Ciocnirea de oțel a fost o artă nobilă încă din antichitate, cu atât mai onorabilă când și unde o privea și cezarul. Aproape se află spațiul prin care poți ajunge și pleca doar prin același loc. În acesta căutați următorul indiciu.
+            </p>
+        </div>
     </div>
 
     <script>
-const PASSWORD = "bdayDCGold";
+        const PASSWORD = "bdayDCGold";
 
-function check() {
-  if (pw.value === PASSWORD) {
-    lock.style.display = "none";
-    content.style.display = "block";
-  }
-}
+        function check() {
+            if (pw.value === PASSWORD) {
+                lock.style.display = "none";
+                content.style.display = "block";
+            }
+        }
     </script>
 
 </body>
