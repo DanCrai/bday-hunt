@@ -49,6 +49,13 @@
             margin-top: 10px;
         }
 
+        /* Park icon */
+        #parkContainer {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+        }
+
         /* Pulsing circle */
         #pulse {
             width: 80px;
@@ -72,6 +79,9 @@
         </div>
 
         <div id="content" class="card" style="display:none;">
+            <div id="parkContainer">
+                <img src="tineretului.png">
+            </div>
             <p>
                 Îmi încep mesajele cu o vorbă ca să meargă treaba strună: <br />
                 Morcovul tânăr și găina bătrână fac din ciorbă una bună.
@@ -187,7 +197,7 @@
                 updateFeedback(d);
 
                 if (d < 10) {
-                    document.getElementById("status").innerText = "FINAL CLUE: THE OLD TREE";
+                    document.getElementById("status").innerText = "Căutați la baza scărilor divergente ce urcă.";
                     if (beepInterval) clearInterval(beepInterval);
                 }
 

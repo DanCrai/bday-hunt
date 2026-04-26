@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            margin-top: 80px;
+            font-family: Arial, sans-serif;
+            background: #111;
+            color: #eee;
+        }
+
+        #mainContent {
+            margin-top: 90px;
+            padding: 15px;
+        }
+
+        .card {
+            background: #1b1b1b;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+
+        input, button {
+            width: 50%;
+            max-width: 500px;
+            padding: 10px;
+            margin: 10px auto;
+            display: block;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            border: none;
+            background: #3a86ff;
+            color: white;
+        }
+
+        audio {
+            width: 100%;
+            max-width: 500px;
+            margin-top: 15px;
+        }
+
+        /* remove arrows from number input */
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            appearance: textfield;
+        }
+
+        #parkContainer {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+        }
+
+            #parkContainer img {
+                width: 60px;
+            }
+    </style>
+</head>
+
+<body>
+
+    <div id="mainContent">
+
+        <div id="lock" class="card">
+            <input type="password" id="pw" placeholder="Access key">
+            <button onclick="unlock()">Enter</button>
+        </div>
+
+        <div id="content" class="card" style="display:none;">
+
+            <div id="parkContainer">
+                <img src="lumea-copiilor.png">
+            </div>
+
+            <p>
+                -..- --.- -..-   -..- ---. -- -.- -....   --.- -.- -..-- - -.-. -.- --.. -.-   -- -.-.-   ----   -.--. ---- -..-. -. -   -- -   -..-- -   --.- -.- - -..-. --- -   -.-.. -..-. - -. -   -..-- -.-.. -..-. -.-.- ---. - <br />
+                --.- ---- -..-. -- ---- -.--. -.-.- --..   -.-.. - ---. - -..-.   -..-- -..-   --- - -..- ---. -   -. - -.-.. -..-. - ---. -   --. - --   --. - --   -.. -..- ---.   -- -..- ---- -..-. -. -   -.-.- ---. -   -. -.-.- ---. -
+            </p>
+
+            <p>
+                Unde-i Morse? Nu e Morse. E plecat în altă bază.
+            </p>
+
+            <audio id="player" controls>
+                <source id="audioSource" src="morse.wav" type="audio/mpeg">
+            </audio>
+
+        </div>
+
+    </div>
+
+    <script>
+        const PASSWORD = "bdayDCGold";
+
+        function unlock() {
+            if (document.getElementById("pw").value === PASSWORD) {
+                document.getElementById("lock").style.display = "none";
+                document.getElementById("content").style.display = "block";
+            }
+        }
+    </script>
+
+</body>
+</html>
