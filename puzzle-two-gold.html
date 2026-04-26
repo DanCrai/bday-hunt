@@ -1,44 +1,125 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            margin-top: 80px;
+            font-family: Arial, sans-serif;
+            background: #111;
+            color: #eee;
+        }
+
+        /* Main container */
+        #mainContent {
+            margin-top: 90px;
+            padding: 15px;
+        }
+
+        /* Card-style box */
+        .card {
+            background: #1b1b1b;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        input, button {
+            width: 50%;
+            max-width: 500px;
+            padding: 10px;
+            margin: 10px auto;
+            display: block;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            border: none;
+            background: #3a86ff;
+            color: white;
+        }
+
+        #result {
+            margin-top: 10px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        /* Park icon */
+        #parkContainer {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+        }
+
+            #parkContainer img {
+                width: 60px;
+            }
+
+        h3 {
+            text-align: center;
+            margin-top: 0;
+        }
+
+        p {
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
 <body>
 
-    <div id="lock">
-        <input type="password" id="pw">
-        <button onclick="unlock()">Enter</button>
-    </div>
+    <div id="mainContent">
 
-    <div id="content" style="display:none;">
+        <!-- PASSWORD -->
+        <div id="lock" class="card">
+            <input type="password" id="pw" placeholder="Access key">
+            <button onclick="unlock()">Enter</button>
+        </div>
 
-        <p>
-            1234 <br />
-            1235 <br />
-            1758 <br />
-        </p>
+        <!-- CONTENT -->
+        <div id="content" class="card" style="display:none;">
 
-        <h3 id="topMessage">Enter the code</h3>
+            <div id="parkContainer">
+                <img src="carol.png">
+            </div>
+            <p>
+                Îmi încep mesajele cu o vorbă ca să meargă treaba strună: <br />
+                Morcovul tânăr și găina bătrână fac din ciorbă una bună.
+            </p>
+            <p>
+                Departe de început vederea lor de piatră veghează. Spatele fiecăreia ascunde un cifru, dar doar unul va arăta calea.
+            </p>
 
-        <input id="answer">
-        <button onclick="checkAnswer()">Submit</button>
+            <h3 id="topMessage">Codul Secret</h3>
 
-        <p id="result"></p>
+            <input id="answer" placeholder="Introdu codul">
+            <button onclick="checkAnswer()">Submit</button>
+
+            <p id="result"></p>
+        </div>
+
     </div>
 
     <script>
         const PASSWORD = "bdayDCGold";
-        const CORRECT = "1234";
+        const CORRECT = "2417";
 
-        const COOLDOWN = 30000; // 30 seconds
+        const COOLDOWN = 30000;
 
         let lockedUntil = 0;
 
         function unlock() {
-            if (pw.value === PASSWORD) {
-                lock.style.display = "none";
-                content.style.display = "block";
-
-                // start initial cooldown ONCE
-                lockedUntil = Date.now() + COOLDOWN * 2;
-                updateCooldown("You need to wait ", " seconds before trying to guess.");
+            if (document.getElementById("pw").value === PASSWORD) {
+                document.getElementById("lock").style.display = "none";
+                document.getElementById("content").style.display = "block";
             }
         }
 
@@ -49,26 +130,30 @@
                 return;
             }
 
+            const answer = document.getElementById("answer");
+            const result = document.getElementById("result");
+
             if (answer.value === CORRECT) {
-                result.innerText = "Correct! Go to the fountain.";
+                window.location.href = "https://dancrai.github.io/bday-hunt/puzzle-three-gold.html";
                 return;
             } else {
-                result.innerText = "Wrong!";
                 answer.value = "";
             }
 
-            // cooldown after EVERY guess
             lockedUntil = now + COOLDOWN;
-            updateCooldown("WRONG! You need to wait ", " seconds before trying again.");
+            updateCooldown("Greșit! Așteptați ", " secunde până la următoarea încercare.");
         }
 
-        function updateCooldown(prefixText, sufixText) {
+        function updateCooldown(prefixText, suffixText) {
+            const result = document.getElementById("result");
+            const answer = document.getElementById("answer");
+
             const interval = setInterval(() => {
                 const now = Date.now();
                 const remaining = Math.ceil((lockedUntil - now) / 1000);
 
                 if (remaining > 0) {
-                    result.innerText = prefixText + remaining + sufixText;
+                    result.innerText = prefixText + remaining + suffixText;
                     answer.disabled = true;
                 } else {
                     result.innerText = "";

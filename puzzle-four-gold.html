@@ -16,11 +16,13 @@
             color: #eee;
         }
 
+        /* Main container */
         #mainContent {
             margin-top: 90px;
             padding: 15px;
         }
 
+        /* Card */
         .card {
             background: #1b1b1b;
             border-radius: 12px;
@@ -45,23 +47,14 @@
             color: white;
         }
 
-        audio {
+        /* Image */
+        #img {
             width: 100%;
-            max-width: 500px;
-            margin-top: 15px;
+            max-width: 1000px;
+            border-radius: 10px;
         }
 
-        /* remove arrows from number input */
-        input[type=number]::-webkit-outer-spin-button,
-        input[type=number]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-
-        input[type=number] {
-            appearance: textfield;
-        }
-
+        /* Park icon */
         #parkContainer {
             position: fixed;
             top: 10px;
@@ -71,6 +64,10 @@
             #parkContainer img {
                 width: 60px;
             }
+
+        p {
+            line-height: 1.5;
+        }
     </style>
 </head>
 
@@ -78,11 +75,13 @@
 
     <div id="mainContent">
 
+        <!-- PASSWORD -->
         <div id="lock" class="card">
             <input type="password" id="pw" placeholder="Access key">
             <button onclick="unlock()">Enter</button>
         </div>
 
+        <!-- CONTENT -->
         <div id="content" class="card" style="display:none;">
 
             <div id="parkContainer">
@@ -95,15 +94,14 @@
             </p>
 
             <p>
-                Vocile din capul dementului par să încerce sa vă ghideze. Dar oare veți reuși să descifrați mesajul încâlcit?
+                Oare încotro?
             </p>
 
-            <audio id="player" controls>
-                <source id="audioSource" src="reverse-message.mp3" type="audio/mpeg">
-            </audio>
+            <img id="img" src="emoji-puzzle.png">
 
-            <input id="speed" type="number" step="0.1" placeholder="Set playback speed">
-            <button onclick="setSpeed()">Apply</button>
+            <!-- DEBUG (optional)
+            <p id="debug" style="font-size:12px;color:gray;"></p>
+            -->
 
         </div>
 
@@ -112,31 +110,13 @@
     <script>
         const PASSWORD = "bdayDCGold";
 
+        let intervalStarted = false;
+
         function unlock() {
             if (document.getElementById("pw").value === PASSWORD) {
                 document.getElementById("lock").style.display = "none";
                 document.getElementById("content").style.display = "block";
             }
-        }
-
-        function setSpeed() {
-            const player = document.getElementById("player");
-            const source = document.getElementById("audioSource");
-            let speed = parseFloat(document.getElementById("speed").value);
-
-            if (isNaN(speed) || speed === 0) return;
-
-            // negative = switch to normal audio
-            if (speed < 0) {
-                source.src = "normal-message.wav";
-                speed = Math.abs(speed);
-            } else {
-                source.src = "reverse-message.mp3";
-            }
-
-            player.load();
-            player.playbackRate = speed;
-            player.play();
         }
     </script>
 
