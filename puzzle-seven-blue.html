@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            margin-top: 80px;
+            font-family: Arial, sans-serif;
+            background: #111;
+            color: #eee;
+        }
+
+        /* Main container */
+        #mainContent {
+            margin-top: 90px;
+            padding: 15px;
+        }
+
+        /* Card */
+        .card {
+            background: #1b1b1b;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+
+        input, button {
+            width: 50%;
+            max-width: 500px;
+            padding: 10px;
+            margin: 10px auto;
+            display: block;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            border: none;
+            background: #3a86ff;
+            color: white;
+        }
+
+        /* Image */
+        #img {
+            width: 100%;
+            max-width: 1000px;
+            border-radius: 10px;
+        }
+
+        /* Park icon */
+        #parkContainer {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+        }
+
+            #parkContainer img {
+                width: 60px;
+            }
+
+        p {
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="mainContent">
+
+        <!-- PASSWORD -->
+        <div id="lock" class="card">
+            <input type="password" id="pw" placeholder="Access key">
+            <button onclick="unlock()">Enter</button>
+        </div>
+
+        <!-- CONTENT -->
+        <div id="content" class="card" style="display:none;">
+
+            <div id="parkContainer">
+                <img src="tineretului.png">
+            </div>
+
+            <p>
+                Îmi încep mesajele cu o vorbă ca să meargă treaba strună: <br />
+                Morcovul tânăr și găina bătrână fac din ciorbă una bună.
+            </p>
+
+            <p>
+                Oare înncotro?
+            </p>
+
+            <img id="img" src="emoji-puzzle.png">
+
+            <!-- DEBUG (optional)
+            <p id="debug" style="font-size:12px;color:gray;"></p>
+            -->
+
+        </div>
+
+    </div>
+
+    <script>
+        const PASSWORD = "bdayDCBlue";
+
+        let intervalStarted = false;
+
+        function unlock() {
+            if (document.getElementById("pw").value === PASSWORD) {
+                document.getElementById("lock").style.display = "none";
+                document.getElementById("content").style.display = "block";
+            }
+        }
+    </script>
+
+</body>
+</html>
