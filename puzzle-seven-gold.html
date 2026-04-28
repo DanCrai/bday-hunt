@@ -87,7 +87,7 @@
                 Morcovul tânăr și găina bătrână fac din ciorbă una bună.
             </p>
             <p>
-                Semnalul vă poate ghida luând urma mirosului de moldovean borât.
+                Semnalul vă poate ghida luând urmna mirosului de moldovean borât.
             </p>
             <p id="status">Tap start</p>
             <button onclick="start()">Start Scanner</button>
@@ -101,74 +101,96 @@
         const PASSWORD = "bdayDCGold";
 
         // TARGET
-        const targetLat = 44.404455;
-        const targetLon = 26.108685;
+        const targetLat = 44.404586;
+        const targetLon = 26.108273;
 
         let ctx;
-        let beepInterval = null;
-        let currentInterval = 1000;
+        let loopRunning = false;
+        let currentTier = null;
 
-        // create ONE audio context
+        // init audio once
         function initAudio() {
             if (!ctx) {
                 ctx = new (window.AudioContext || window.webkitAudioContext)();
             }
         }
 
-        // stable beep
+        // play beep
         function playBeep(volume) {
-            const oscillator = ctx.createOscillator();
+            const osc = ctx.createOscillator();
             const gain = ctx.createGain();
 
-            oscillator.type = "sine";
-            oscillator.frequency.value = 800;
+            osc.type = "sine";
+            osc.frequency.value = 800;
 
             gain.gain.value = volume;
 
-            oscillator.connect(gain);
+            osc.connect(gain);
             gain.connect(ctx.destination);
 
-            oscillator.start();
-            oscillator.stop(ctx.currentTime + 0.1);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.1);
         }
 
-        // distance → tier system
-        function getTier(distance) {
-            if (distance > 1000) return { interval: 2000, volume: 0.02, color: "#0a1aff", size: 1 };
-            if (distance > 500) return { interval: 1500, volume: 0.04, color: "#1e90ff", size: 1.2 };
-            if (distance > 200) return { interval: 900, volume: 0.07, color: "#00bfff", size: 1.5 };
-            if (distance > 100) return { interval: 500, volume: 0.1, color: "#7fff00", size: 1.8 };
-            if (distance > 50) return { interval: 300, volume: 0.15, color: "#ffd700", size: 2.2 };
-            if (distance > 20) return { interval: 200, volume: 0.2, color: "#ff8c00", size: 2.5 };
-            return { interval: 120, volume: 0.3, color: "#ff0000", size: 3 };
+        // YOUR EXACT TIERS
+        function getTier(d) {
+            if (d > 1000) return { interval: 2000, volume: 0, color: "#000000", scale: 1 };
+
+            if (d > 900) return { interval: 1800, volume: 0.03, color: "#00008B", scale: 1.25 };
+            if (d > 800) return { interval: 1700, volume: 0.035, color: "#0000CD", scale: 1.5 };
+            if (d > 700) return { interval: 1600, volume: 0.04, color: "#4169E1", scale: 1.75 };
+            if (d > 600) return { interval: 1500, volume: 0.05, color: "#6495ED", scale: 2 };
+            if (d > 500) return { interval: 1400, volume: 0.06, color: "#87CEFA", scale: 2.25 };
+
+            if (d > 450) return { interval: 1300, volume: 0.07, color: "#006400", scale: 2.5 };
+            if (d > 400) return { interval: 1200, volume: 0.08, color: "#228B22", scale: 2.75 };
+            if (d > 350) return { interval: 1100, volume: 0.09, color: "#32CD32", scale: 3 };
+            if (d > 300) return { interval: 1000, volume: 0.1, color: "#7CFC00", scale: 3.25 };
+            if (d > 250) return { interval: 900, volume: 0.11, color: "#ADFF2F", scale: 3.5 };
+
+            if (d > 200) return { interval: 800, volume: 0.13, color: "#8B0000", scale: 4 };
+            if (d > 150) return { interval: 700, volume: 0.15, color: "#FF0000", scale: 4.5 };
+            if (d > 100) return { interval: 600, volume: 0.17, color: "#FF6666", scale: 5 };
+
+            if (d > 75) return { interval: 500, volume: 0.2, color: "#FFA500", scale: 5.5 };
+            if (d > 50) return { interval: 400, volume: 0.22, color: "#CCCC00", scale: 6 };
+            if (d > 25) return { interval: 300, volume: 0.25, color: "#FFFF00", scale: 6.5 };
+
+            return { interval: 200, volume: 0.3, color: "#FFFFFF", scale: 7 };
         }
 
-        function updateFeedback(distance) {
-            const tier = getTier(distance);
+        // unified loop
+        async function runLoop() {
+            if (loopRunning) return;
+            loopRunning = true;
+
             const pulse = document.getElementById("pulse");
 
-            // update color
-            pulse.style.background = tier.color;
+            while (loopRunning) {
+                const d = window.currentDistance || 9999;
+                const tier = getTier(d);
 
-            // pulse animation
-            pulse.animate([
-                { transform: "scale(1)" },
-                { transform: "scale(" + tier.size + ")" },
-                { transform: "scale(1)" }
-            ], {
-                duration: tier.interval,
-                iterations: 1
-            });
+                currentTier = tier;
 
-            // update beep interval
-            if (Math.abs(tier.interval - currentInterval) > 50) {
-                currentInterval = tier.interval;
+                // apply color
+                pulse.style.background = tier.color;
 
-                if (beepInterval) clearInterval(beepInterval);
+                // animate (grow then shrink)
+                pulse.animate([
+                    { transform: "scale(1)" },
+                    { transform: "scale(" + tier.scale + ")" },
+                    { transform: "scale(1)" }
+                ], {
+                    duration: tier.interval,
+                    easing: "ease-out"
+                });
 
-                beepInterval = setInterval(() => {
+                // play sound (skip if >1km)
+                if (tier.volume > 0) {
                     playBeep(tier.volume);
-                }, tier.interval);
+                }
+
+                await new Promise(r => setTimeout(r, tier.interval));
             }
         }
 
@@ -183,6 +205,8 @@
             initAudio();
             ctx.resume();
 
+            runLoop();
+
             navigator.geolocation.watchPosition(pos => {
                 const d = getDistance(
                     pos.coords.latitude,
@@ -191,14 +215,15 @@
                     targetLon
                 );
 
+                window.currentDistance = d;
+
                 document.getElementById("status").innerText =
                     "Distance: " + Math.round(d) + "m";
 
-                updateFeedback(d);
-
                 if (d < 10) {
-                    document.getElementById("status").innerText = "Căutați la baza scărilor divergente ce urcă.";
-                    if (beepInterval) clearInterval(beepInterval);
+                    document.getElementById("status").innerText =
+                        "Căutați la baza scărilor divergente ce urcă.";
+                    loopRunning = false;
                 }
 
             }, err => {
