@@ -134,29 +134,35 @@
 
         // YOUR EXACT TIERS
         function getTier(d) {
-            if (d > 1000) return { interval: 2000, volume: 0, color: "#000000", scale: 1 };
 
-            if (d > 900) return { interval: 1800, volume: 0.03, color: "#00008B", scale: 1.25 };
-            if (d > 800) return { interval: 1700, volume: 0.035, color: "#0000CD", scale: 1.5 };
-            if (d > 700) return { interval: 1600, volume: 0.04, color: "#4169E1", scale: 1.75 };
-            if (d > 600) return { interval: 1500, volume: 0.05, color: "#6495ED", scale: 2 };
-            if (d > 500) return { interval: 1400, volume: 0.06, color: "#87CEFA", scale: 2.25 };
+            // >1km
+            if (d > 1000) return { interval: 11000, volume: 0, color: "#000000", scale: 1 };
 
-            if (d > 450) return { interval: 1300, volume: 0.07, color: "#006400", scale: 2.5 };
-            if (d > 400) return { interval: 1200, volume: 0.08, color: "#228B22", scale: 2.75 };
-            if (d > 350) return { interval: 1100, volume: 0.09, color: "#32CD32", scale: 3 };
-            if (d > 300) return { interval: 1000, volume: 0.1, color: "#7CFC00", scale: 3.25 };
-            if (d > 250) return { interval: 900, volume: 0.11, color: "#ADFF2F", scale: 3.5 };
+            // every 100m = -1 second
+            if (d > 900) return { interval: 10000, volume: 0.03, color: "#00008B", scale: 1.25 };
+            if (d > 800) return { interval: 9000, volume: 0.035, color: "#0000CD", scale: 1.5 };
+            if (d > 700) return { interval: 8000, volume: 0.04, color: "#4169E1", scale: 1.75 };
+            if (d > 600) return { interval: 7000, volume: 0.05, color: "#6495ED", scale: 2 };
+            if (d > 500) return { interval: 6000, volume: 0.06, color: "#87CEFA", scale: 2.25 };
 
-            if (d > 200) return { interval: 800, volume: 0.13, color: "#8B0000", scale: 4 };
-            if (d > 150) return { interval: 700, volume: 0.15, color: "#FF0000", scale: 4.5 };
-            if (d > 100) return { interval: 600, volume: 0.17, color: "#FF6666", scale: 5 };
+            // 50m steps
+            if (d > 450) return { interval: 5000, volume: 0.07, color: "#006400", scale: 2.5 };
+            if (d > 400) return { interval: 4500, volume: 0.08, color: "#228B22", scale: 2.75 };
+            if (d > 350) return { interval: 4000, volume: 0.09, color: "#32CD32", scale: 3 };
+            if (d > 300) return { interval: 3500, volume: 0.1, color: "#7CFC00", scale: 3.25 };
+            if (d > 250) return { interval: 3000, volume: 0.11, color: "#ADFF2F", scale: 3.5 };
 
-            if (d > 75) return { interval: 500, volume: 0.2, color: "#FFA500", scale: 5.5 };
-            if (d > 50) return { interval: 400, volume: 0.22, color: "#CCCC00", scale: 6 };
-            if (d > 25) return { interval: 300, volume: 0.25, color: "#FFFF00", scale: 6.5 };
+            // 50m → faster drop
+            if (d > 200) return { interval: 2500, volume: 0.13, color: "#8B0000", scale: 4 };
+            if (d > 150) return { interval: 2000, volume: 0.15, color: "#FF0000", scale: 4.5 };
+            if (d > 100) return { interval: 1500, volume: 0.17, color: "#FF6666", scale: 5 };
 
-            return { interval: 200, volume: 0.3, color: "#FFFFFF", scale: 7 };
+            // final zone (your exact spec)
+            if (d > 75) return { interval: 1000, volume: 0.2, color: "#FFA500", scale: 5.5 };
+            if (d > 50) return { interval: 750, volume: 0.22, color: "#CCCC00", scale: 6 };
+            if (d > 25) return { interval: 500, volume: 0.25, color: "#FFFF00", scale: 6.5 };
+
+            return { interval: 300, volume: 0.3, color: "#FFFFFF", scale: 7 };
         }
 
         // unified loop
