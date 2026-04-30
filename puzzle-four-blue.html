@@ -58,8 +58,8 @@
 
         /* Pulsing circle */
         #pulse {
-            width: 80px;
-            height: 80px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             margin: 30px auto;
             background: blue;
@@ -139,7 +139,7 @@
         function getTier(d) {
 
             // >1km
-            if (d > 1000) return { interval: 11000, volume: 0, color: "#000000", scale: 1 };
+            if (d > 1000) return { interval: 11000, volume: 0.1, color: "#111111", scale: 1 };
 
             // every 100m = -1 second
             if (d > 900) return { interval: 10000, volume: 0.03, color: "#00008B", scale: 1.25 };
@@ -226,10 +226,10 @@
 
                 window.currentDistance = d;
 
-                document.getElementById("status").innerText =
-                    "Distance: " + Math.round(d) + "m";
+                /*document.getElementById("status").innerText =
+                    "Distance: " + Math.round(d) + "m";*/
 
-                if (d < 10) {
+                if (d < 15) {
                     document.getElementById("status").innerText =
                         "Căutați la baza scărilor divergente ce urcă.";
                     loopRunning = false;

@@ -98,7 +98,7 @@
                 Parola pentru următorul: ztYPl
             </p>
             <p>
-                Departe de început vederea lor de poiatră veghează. Spatele fiecăreia ascunde un cifru, dar doar unul va arăta calea.
+                Departe de început vederea lor de poiatră veghează. Spatele fiecăreia ascunde un cifru, dar doar cel mai aproape de prezent va arăta calea.
             </p>
 
             <h3 id="topMessage">Codul Secret</h3>
@@ -123,6 +123,9 @@
             if (document.getElementById("pw").value === PASSWORD) {
                 document.getElementById("lock").style.display = "none";
                 document.getElementById("content").style.display = "block";
+
+                lockedUntil = Date.now() + COOLDOWN;
+                updateCooldown("Așteptați ", " secunde până să încercați.")
             }
         }
 

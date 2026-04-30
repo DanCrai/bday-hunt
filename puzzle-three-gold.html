@@ -100,6 +100,7 @@
             </p>
 
             <img id="img" src="zoom1.jpeg">
+            <p id="timer" style="margin-top:10px;"></p>
 
             <!-- DEBUG (optional)
     <p id="debug" style="font-size:12px;color:gray;"></p>
@@ -128,7 +129,11 @@
                 updateImage();
 
                 if (!intervalStarted) {
-                    setInterval(updateImage, 5000);
+                    setInterval(() => {
+                        updateImage();
+                        updateTimer();
+                    }, 200); // smooth timer update
+
                     intervalStarted = true;
                 }
             }
@@ -137,7 +142,7 @@
         function updateImage() {
             const now = Date.now();
 
-            const step = Math.max(0, Math.floor((now - startTime) / 300000));
+            const step = Math.max(0, Math.floor((now - startTime) / 180000));
             const index = Math.min(step, images.length - 1);
 
             const imgElement = document.getElementById("img");
@@ -152,6 +157,29 @@
                 " | Index: " + index +
                 " | Image: " + images[index];
             */
+        }
+
+        function updateTimer() {
+            const now = Date.now();
+
+            const stepDuration = 180000; // 3 minutes
+            const elapsed = now - startTime;
+
+            const currentStep = Math.floor(elapsed / stepDuration);
+
+            // if last image reached → no timer
+            if (currentStep >= images.length - 1) {
+                document.getElementById("timer").innerText = "";
+                return;
+            }
+
+            const nextStepTime = (currentStep + 1) * stepDuration;
+            const remaining = nextStepTime - elapsed;
+
+            const seconds = Math.ceil(remaining / 1000);
+
+            document.getElementById("timer").innerText =
+                "Următorul zoom out în: " + seconds + " sec";
         }
     </script>
 
