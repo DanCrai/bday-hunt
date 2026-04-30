@@ -104,7 +104,7 @@
                 <source id="audioSource" src="reverse-message.mp3" type="audio/mpeg">
             </audio>
 
-            <input id="speed" type="number" step="0.1" placeholder="Set playback speed">
+            <input id="speed" type="text" step="0.1" placeholder="Set playback speed">
             <button onclick="setSpeed()">Apply</button>
 
         </div>
@@ -128,7 +128,6 @@
 
             if (isNaN(speed) || speed === 0) return;
 
-            // negative = switch to normal audio
             if (speed < 0) {
                 source.src = "normal-message.wav";
                 speed = Math.abs(speed);
